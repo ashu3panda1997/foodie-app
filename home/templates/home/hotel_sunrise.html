@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{%static 'img/logo foodie.png'%}">
+    <title>☀ Hotel Sunrise</title>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <script src="{% static 'js/script.js'%}"></script>
+<script>
+    function getCSRFToken() {
+        return document.cookie.split('; ')
+            .find(row => row.startsWith('csrftoken'))
+            ?.split('=')[1];
+    }
+</script>
+
+</head>
+<body>
+    <header>
+        <img src="{%static 'img/logo foodie.webp'%}" alt="Foodie" class="applogo">
+        <div class="logo">Foodie</div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'homepage' %}">Home</a></li>
+                <li><a href="{% url 'orders' %}">Orders</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><span id="cart-count">0</span> items | <a href="{% url 'cart_view' %}"> 🛒 Cart</a>
+                {% if user.is_authenticated %}
+                <li><p>Welcome, {{ user.username }}</p><a href="{%url 'login_user'%}">Logout</a> </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+        <h1>☀️ Hotel Sunshine - Breakfast Menu</h1>
+    <section class="menu">
+        {% for item in foodItems %}
+        <div class="menu-item">
+            <h2>{{item.id}}</h2>
+            <h2>{{item.name}}</h2>
+            <p>Fluffy pancakes topped with maple syrup.</p>
+            <p class="price">{{item.price}}</p>
+            <button class="add-to-cart" data-name="{{item.name}}" data-price="{{item.price}}">Add to Cart</button>
+        </div>
+        {% endfor %}
+    </section>
+
+</body>
+</html>
+

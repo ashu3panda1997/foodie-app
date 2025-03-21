@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{%static 'img/logo foodie.png'%}">
+    <title>Order</title>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+
+</head>
+<body>
+<script>
+function goBack() {
+    window.history.back(); // Goes back to the previous page
+}
+</script>
+<header>
+        <button onclick="goBack()" class="back-btn">
+        ⬅ Back
+    </button>
+    <br>
+        <img src="{%static 'img/logo foodie.webp'%}" alt="Foodie" class="applogo">
+        <div class="logo">Foodie</div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'homepage' %}">Home</a></li>
+                <li><a href="{% url 'orders' %}">Orders</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><span id="cart-count">0</span> items | <a href="{% url 'cart_view' %}"> 🛒 Cart</a>
+                {% if user.is_authenticated %}
+                <li><p>{{ user.username }}</p><a href="{%url 'login_user'%}">Logout</a> </li>
+                {% else %}
+                    <li><a href="{%url 'login_user'%}">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+<section class="hero">
+        <div class="hero-text">
+            <h1>Thank you for your purchase! Your order has been placed successfully.</h1>
+            <p>We will process your order and deliver it to you soon.</p>
+
+        </div>
+    </section>
+<a href="{% url 'homepage' %}"><button>Continue Shopping</button></a>
+<a href="{% url 'orders' %}"><button>View Order History</button></a>
+
+</body>
+</html>

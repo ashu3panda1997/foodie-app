@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{%static 'img/logo foodie.png'%}">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+
+    <style>
+
+        .form-container {
+            width: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form p {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #007bff;
+        }
+
+        button {
+            width: 100%;
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<body>
+<script>
+function goBack() {
+    window.history.back(); // Goes back to the previous page
+}
+</script>
+<header>
+        <button onclick="goBack()" class="back-btn">
+        ⬅
+    </button>
+    <br>
+        <img src="{%static 'img/logo foodie.webp'%}" alt="Foodie" class="applogo">
+        <div class="logo">Foodie</div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'homepage' %}">Home</a></li>
+                <li><a href="{% url 'orders' %}">Orders</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><span id="cart-count">0</span> items | <a href="{% url 'cart_view' %}"> 🛒 Cart</a>
+                {% if user.is_authenticated %}
+                <li><p>{{ user.username }}</p><a href="{%url 'login_user'%}">Logout</a> </li>
+                {% else %}
+                    <li><a href="{%url 'login_user'%}">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+{% if cart_items %}
+    <table border="1">
+        <tr>
+            <th>Food Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+        {% for item in cart_items %}
+        <tr>
+            <td>{{ item.food_item.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.food_item.price }}</td>
+            <td>₹{{ item.get_total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <p><strong>Total Price:</strong> ₹{{ total_price }}</p>
+<br>
+    <div class="form-container">
+    <h3>Shipping Details</h3>
+    <form method="post" action="{% url 'place_order' %}">
+        {% csrf_token %}
+       {{ form.as_p }}
+        <button type="submit">Place Order</button>
+    </form>
+    </div>
+{% else %}
+    <p>Your cart is empty. <a href="{% url 'home' %}">Continue Shopping</a></p>
+{% endif %}
+
+
+</body>
+</html>

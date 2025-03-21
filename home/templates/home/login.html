@@ -1,0 +1,105 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block body %}
+
+<script>
+function goBack() {
+    window.history.back(); // Goes back to the previous page
+}
+</script>
+<header>
+        <button onclick="goBack()" class="back-btn">
+        ⬅
+    </button>
+    <br>
+        <img src="{%static 'img/logo foodie.webp'%}" alt="Foodie" class="applogo">
+        <div class="logo">Foodie</div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'homepage' %}">Home</a></li>
+                <li><a href="{% url 'orders' %}">Orders</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><span id="cart-count">0</span> items | <a href="{% url 'cart_view' %}"> 🛒 Cart</a>
+                {% if user.is_authenticated %}
+                <li><p>{{ user.username }}</p><a href="{%url 'login_user'%}">Logout</a> </li>
+                {% else %}
+                    <li><a href="{%url 'login_user'%}">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+<section class="hero">
+        <div class="hero-text">
+            <h1>Order Your Favorite Food Now!</h1>
+            <p>Fast delivery to your doorstep</p>
+
+        </div>
+    </section>
+    <section>
+        <marquee><h1><p>Welcome, {{ user.username }}</p></h1></marquee>
+    </section>
+    <section class="menu">
+        <div class="menu-items">
+            <div class="menu-item">
+                <img src="{% static 'img/breakfast.webp'%}" alt="breakfast">
+                <h3>Breakfast</h3>
+                <p>"Kickstart your day with a power-packed breakfast!"</p>
+                 <a href="{% url 'breakfast' %}" >
+                <button>Go to Menu Page</button>
+                 </a>
+            </div>
+            <div class="menu-item">
+                <img src="{% static 'img/snacks.webp'%}" alt="snacks">
+                <h3>Snacks</h3>
+                <p>"Satisfy your cravings with tasty, anytime snacks!"</p>
+                <button>Order Now</button>
+            </div>
+            <div class="menu-item">
+                <img src="{% static 'img/lunch.webp'%}" alt="lunch">
+                <h3>Lunch</h3>
+                <p> "Fuel your afternoon with a hearty and delicious lunch!"</p>
+                <button>Order Now</button>
+            </div>
+             <div class="menu-item">
+                <img src="{% static 'img/dinner.webp'%}" alt="dinner">
+                <h3>Dinner</h3>
+                <p> "End your day with a comforting, flavorful dinner!"</p>
+                <button>Order Now</button>
+            </div>
+        </div>
+    </section>
+    <h2><center> Our Restaurant </center></h2>
+    <section class="container">
+              <div class="menu-item">
+                <img src="{% static 'img/dinner.webp'%}" alt="dinner" class="box">
+                <h4>ITC Grand</h4>
+                  <br>
+                <button>Menu</button>
+            </div>
+             <div class="menu-item">
+                <img src="{% static 'img/dinner.webp'%}" alt="dinner">
+                <h4>The Table</h4>
+                  <br>
+                <button>Menu</button>
+            </div>
+             <div class="menu-item">
+                <img src="{% static 'img/dinner.webp'%}" alt="dinner">
+                <h4>World Famous Paradise</h4>
+                  <br>
+                <button>Menu</button>
+            </div>
+             <div class="menu-item">
+                <img src="{% static 'img/dinner.webp'%}" alt="dinner">
+                <h4>Pakwaan Grand</h4>
+                  <br>
+                <button>Menu</button>
+            </div>
+             <div class="menu-item">
+                <img src="{% static 'img/dinner.webp'%}" alt="dinner">
+                <h4>Shah Ghouse</h4>
+                  <br>
+                <button>Menu</button>
+            </div>
+    </section>
+
+{% endblock %}

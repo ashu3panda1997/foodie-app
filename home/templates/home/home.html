@@ -1,0 +1,77 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block body %}
+<header>
+        <img src="{%static 'img/logo foodie.webp'%}" alt="Foodie" class="applogo">
+        <div class="logo">Foodie</div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'homepage' %}">Home</a></li>
+                <li><a href="{% url 'orders' %}">Orders</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><span id="cart-count">0</span> items | <a href="{% url 'cart_view' %}"> 🛒 Cart</a>
+                {% if user.is_authenticated %}
+                <li><p>{{ user.username }}</p><a href="{%url 'login_user'%}">Logout</a> </li>
+                {% else %}
+                    <li><a href="{%url 'login_user'%}">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+{% if user.is_customer %}
+<section class="hero">
+        <div class="hero-text">
+            <h1>Order Your Favorite Food Now!</h1>
+            <p>Fast delivery to your doorstep</p>
+
+        </div>
+    </section>
+    <section>
+        <marquee><h1><p>Welcome, {{ user.username }}</p></h1></marquee>
+    </section>
+        <br>
+<section class="container">
+    {% for category in categories %}
+    <div class="container">
+        {% if category.image %}
+        <img src="{{ category.image.url }}" class="restaurant-logo" alt="{{ category }}">
+        {% endif %}
+        <a href="{% url 'category_menu' category%}"><h3><button>{{ category }}</button></h3></a>
+    </div>
+    {% endfor %}
+</section>
+<br>
+<h2><center> Our Restaurants </center></h2>
+<section class="menu-container">  <!-- Container for all restaurant cards -->
+    {% for restaurant in restaurants %}
+        <div class="restaurant-card">  <!-- Individual restaurant box -->
+            {% if restaurant.logo %}
+                <img src="{{ restaurant.logo.url }}" class="restaurant-logo" alt="{{ restaurant.name }}">
+            {% endif %}
+            <h4>{{ restaurant.name }}</h4>
+            <p>📍 {{ restaurant.address }}</p>
+            <p>📞 {{ restaurant.phone }} | ✉️ {{ restaurant.email }}</p>
+            <p>⏰ {{ restaurant.opening_hours }}</p>
+            <br>
+            <a href="{% url 'menu_page' restaurant.id %}">
+                <button>See Menu</button></a>
+        </div>
+    {% endfor %}
+</section>
+{% endif %}
+<section class="hero">
+{% if user.is_restaurant_owner %}
+        <div class="hero-text">
+            <h1>"Set up your restaurant in just a few steps – start now!"></h1>
+        </div>
+    {% if restaurant %}
+    <a href="{% url 'restaurant_page' slug=request.user.restaurant.slug %}" >
+        <button>View Restaurant</button></a>
+    {% else %}
+    <p>Contact To Admin To Add Your Restaurant</p>
+    {% endif %}
+{% endif %}
+</section>
+
+{% endblock %}
+

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{%static 'img/logo foodie.png'%}">
+    <title>{{category}}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <style>
+        /* Full-page styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            width: 90%;
+            margin: 20px auto;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        button {
+            padding: 8px 15px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button onclick="goBack()" class="back-btn">
+        ⬅
+    </button>
+    <br>
+        <img src="{%static 'img/logo foodie.webp'%}" alt="Foodie" class="applogo">
+        <div class="logo">Foodie</div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'homepage' %}">Home</a></li>
+                <li><a href="{% url 'orders' %}">Orders</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><a href="{% url 'cart_view' %}">🛒 Cart</a> </li>
+                {% if user.is_authenticated %}
+                <li><p>Welcome, {{ user.username }}</p><a href="{%url 'login_user'%}">Logout</a> </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <h1 style="text-align: center;">🍽️ {{ category }} - Menu 🍽️</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Restaurant</th>
+                <th>Food Item</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if grouped_items %}
+                {% for restaurant, items in grouped_items.items %}
+                    {% for item in items %}
+                    <tr>
+                        {% if forloop.first %}
+                            <td rowspan="{{ items|length }}">{{ restaurant.name }}</td>
+                        {% endif %}
+                        <td>{{ item.name }}</td>
+                        {% if forloop.first %}
+                            <td rowspan="{{ items|length }}">
+                                <a href="{% url 'menu_page' restaurant.id %}"><button>View</button></a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3">No food items available for this category.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{%static 'img/logo foodie.png'%}">
+    <title>Foodie Cart</title>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+
+</head>
+<body>
+<script>
+function goBack() {
+    window.history.back(); // Goes back to the previous page
+}
+</script>
+<header>
+        <button onclick="goBack()" class="back-btn">
+        ⬅
+    </button>
+    <br>
+        <img src="{%static 'img/logo foodie.webp'%}" alt="Foodie" class="applogo">
+        <div class="logo">Foodie</div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'homepage' %}">Home</a></li>
+                <li><a href="{% url 'orders' %}">Orders</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><span id="cart-count">0</span> items | <a href="{% url 'cart_view' %}"> 🛒 Cart</a>
+                {% if user.is_authenticated %}
+                <li><p>{{ user.username }}</p><a href="{%url 'login_user'%}">Logout</a> </li>
+                {% else %}
+                    <li><a href="{%url 'login_user'%}">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+<section class="hero">
+        <div class="hero-text">
+            <h1>Order Your Favorite Food Now!</h1>
+            <p>Fast delivery to your doorstep</p>
+
+        </div>
+    </section>
+<h2>Your Cart</h2>
+{% if cart_items %}
+    <table border="1">
+        <tr>
+            <th>Food Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+        {% for item in cart_items %}
+        <tr>
+            <td>{{ item.food_item.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.food_item.price }}</td>
+            <td>₹{{ item.get_total }}</td>
+            <td>
+                <a href="{% url 'remove_from_cart' item.id  %}" style="color: red;"><button>Remove</button></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+<br>
+    <p><strong>Total Price:</strong> ₹{{ total_price }}</p>
+<br>
+<br>
+<a href="{% url 'checkout' %}"><button>Proceed to Checkout</button></a>
+{% else %}
+    <p>Your cart is empty.</p>
+    <a href="{% url 'homepage' %}">Continue Shopping</a>
+{% endif %}
+
+
+    <footer>
+        <p>&copy; 2025 Foodie. All rights reserved. Created By Ashutosh Panda </p>
+    </footer>
+</body>
+</html>
+
+
+

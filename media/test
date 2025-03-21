@@ -1,0 +1,69 @@
+<!-- Modal Structure -->
+<div id="foodModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Modify Food Item</h2>
+<form method="POST" action="{% url 'update_food' restaurant.slug %}" id="foodUpdateForm">
+    {% csrf_token %}
+    <input type="hidden" id="foodId" name="food_id">
+    <input type="hidden" id="restaurantId" name="restaurant" value="{{ restaurant.id }}">
+
+    <label for="foodName">Food Name:</label>
+    <input type="text" id="foodName" name="name" required>
+
+    <label for="foodPrice">Price:</label>
+    <input type="number" id="foodPrice" name="price" required>
+
+    <label for="foodCategory">Category:</label>
+<select id="foodCategory" name="category" required>
+    <option value="">-- Select a Category --</option>
+    {% for cat in categories %}
+        <option value="{{ cat.id }}">{{ cat.meal_type }}</option>
+    {% endfor %}
+</select>
+    <label for="foodDescription">Description:</label>
+    <textarea id="foodDescription" name="description" required></textarea>
+
+    <label for="availability">Available:</label>
+    <select id="availability" name="is_available">
+        <option value="True">Yes</option>
+        <option value="False">No</option>
+    </select>
+
+    <button type="submit">Update</button>
+</form>
+    </div>
+</div>
+
+<script>
+function openModal(id, name, price, categoryId, available) {
+    console.log("Opening Modal for:", id, "Category ID:", categoryId);
+
+    document.getElementById("foodId").value = id;
+    document.getElementById("foodName").value = name;
+    document.getElementById("foodPrice").value = price;
+    document.getElementById("availability").value = available;
+
+    // Select correct category in dropdown
+    let categoryDropdown = document.getElementById("foodCategory");
+    for (let option of categoryDropdown.options) {
+        if (option.value == categoryId) {
+            option.selected = true;
+            break;
+        }
+    }
+
+    document.getElementById("foodModal").style.display = "block";
+}
+    function closeModal() {
+        document.getElementById("foodModal").style.display = "none";
+    }
+    window.onclick = function(event) {
+        let modal = document.getElementById("foodModal");
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
+</script>
+
+<button onclick="openModal('{{ food.id }}', '{{ food.name }}', '{{ food.price }}', '{{ food.category.id }}', '{{ food.is_available }}')">Modify</button>
