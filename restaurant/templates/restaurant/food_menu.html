@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{%static 'img/logo foodie.png'%}">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <title>{{ restaurant.name }} - Menu</title>
+    <script src="{% static 'js/script.js'%}"></script>
+<script>
+    function getCSRFToken() {
+        return document.cookie.split('; ')
+            .find(row => row.startsWith('csrftoken'))
+            ?.split('=')[1];
+    }
+</script>
+    <style>
+        /* Full-page styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            width: 90%;
+            margin: 20px auto;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        button {
+            padding: 8px 15px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+<script>
+function goBack() {
+    window.history.back(); // Goes back to the previous page
+}
+</script>
+<header>
+       <button onclick="goBack()" class="back-btn">
+        ⬅
+    </button>
+    <br>
+        <img src="{%static 'img/logo foodie.webp'%}" alt="Foodie" class="applogo">
+        <div class="logo">Foodie</div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'homepage' %}">Home</a></li>
+                <li><a href="{% url 'orders' %}">Orders</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><span id="cart-count">0</span> items | <a href="{% url 'cart_view' %}"> 🛒 Cart</a>
+                {% if user.is_authenticated %}
+                <li><p>{{ user.username }}</p><a href="{%url 'login_user'%}">Logout</a> </li>
+                {% else %}
+                    <li><a href="{%url 'login_user'%}">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+<h1>{{ restaurant.name }} - Menu</h1>
+    <p>{{ restaurant.description }}</p>
+    <p>Location: {{ restaurant.location }}</p>
+    <p>Opening Hours: {{ restaurant.opening_hours }}</p>
+<br>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Food Item</th>
+            <th>Food Type</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Availability</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if food_items_by_category %}
+            {% for category, food_items in food_items_by_category.items %}
+                {% for item in food_items %}
+                <tr>
+                    {% if forloop.first %}
+                        <td rowspan="{{ food_items|length }}"><strong>{{ category.meal_type }}</strong></td>
+                    {% endif %}
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.food_type }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>₹{{ item.price }}</td>
+                    <td style="color: {% if item.is_available %}green{% else %}red{% endif %};">
+                        {% if item.is_available %} Available {% else %} Not Available {% endif %}
+                    </td>
+                    <td>
+                        {% if item.is_available %}
+                            <button class="add-to-cart" data-name="{{ item.name }}" data-price="{{ item.price }}">
+                                Add to Cart
+                            </button>
+                        {% else %}
+                            <span style="color: red;">Not Available</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="6">No categories found.</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+     <footer>
+        <p>&copy; 2025 Foodie. All rights reserved. Created By Ashutosh Panda </p>
+    </footer>
+</body>
+</html>

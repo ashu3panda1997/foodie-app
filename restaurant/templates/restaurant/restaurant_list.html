@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Restaurant List</title>
+</head>
+<body>
+<h2>Restaurant List</h2>
+<ul>
+    {% for restaurant in restaurants %}
+        <li>
+            <strong>{{ restaurant.name }}</strong> - {{ restaurant.address }}
+            <br>📞 {{ restaurant.phone }} | ✉️ {{ restaurant.email }}
+            <br>⏰ {{ restaurant.opening_hours }}
+            {% if restaurant.logo %}
+                <br><img src="{{ restaurant.logo.url }}" width="100px">
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

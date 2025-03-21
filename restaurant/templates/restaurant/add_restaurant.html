@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<h2>Add Restaurant</h2>
+<p>Complete your restaurant details to get started.</p>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Restaurant</button>
+    <a href="#" >
+                <button>Go to Menu Page</button>
+</form>
+</body>
+</html>
