@@ -179,6 +179,8 @@ function goBack() {
                 <img src="{{ restaurant.logo.url }}" class="restaurant-logo" alt="{{ restaurant.name }}">
             {% endif %}
       <p>Opening Hours: {{ restaurant.opening_hours }}</p>
+      <br>
+      <a href="{% url 'restaurant-orders' restaurant.slug %}"><button>View Orders</button></a>
   </center>
 <br>
 <h2>Menu</h2>

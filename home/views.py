@@ -143,7 +143,7 @@ def place_order(request):
         form = ShippingForm(request.POST)
         if form.is_valid():
             full_address = f"{form.cleaned_data['full_name']}, {form.cleaned_data['address']}, {form.cleaned_data['city']}, {form.cleaned_data['state']}, {form.cleaned_data['zip_code']}, {form.cleaned_data['country']}"
-
+        restaurant=get_object_or_404(Restaurant, owner=request.user)
         cart = Cart.objects.filter(user=request.user).first()
         cart_items = cart.items.all() if cart else []
 
@@ -152,7 +152,7 @@ def place_order(request):
             return redirect('cart')
 
         # Create Order
-        order = Order.objects.create(user=request.user, address=full_address,
+        order = Order.objects.create(user=request.user, address=full_address,restaurant=restaurant,
                                      total_price=sum(item.get_total() for item in cart_items))
 
         # Send Confirmation mail

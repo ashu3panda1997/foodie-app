@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
-from restaurant.models import FoodItem
+from restaurant.models import FoodItem,Restaurant
 
 
 class Cart(models.Model):
@@ -31,8 +31,9 @@ class CartItem(models.Model):
 class Order(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
-        ('paid', 'Paid'),
-        ('failed', 'Failed'),
+        ('preparing', 'Preparing'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled'),
     ]
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     address = models.TextField()
@@ -40,6 +41,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     email = models.CharField(max_length=80, default='')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE,default="")  # Ensure this exists
 
     def __str__(self):
         return f"Order #{self.id} - {self.user.username} - {self.status}"
